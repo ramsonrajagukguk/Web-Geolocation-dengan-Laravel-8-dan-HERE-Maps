@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('beranda');
+    return view('admin.beranda');
 });
 
 Auth::routes(['verify' => true]);
