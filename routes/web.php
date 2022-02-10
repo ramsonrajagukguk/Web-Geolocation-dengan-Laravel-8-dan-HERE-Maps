@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\Beranda;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +16,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.beranda');
+    return view('welcome');
 });
+
+
+
+
+Route::middleware('auth')-> group(function () {
+    Route::get('/admin', [Beranda::class,'index'])->name('beranda');
+    
+});
+
+
+// Route::get('/admin', function () {
+//     return view('admin.beranda');
+// })->name('admin')->middleware('auth');
+
 
 Auth::routes(['verify' => true]);
 

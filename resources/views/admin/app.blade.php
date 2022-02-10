@@ -30,9 +30,9 @@
 
 <body class="g-sidenav-show  bg-gray-100">
  
-    @include('admin.layouts.navbars.nav')
+  @include('admin.layouts.navbars.sidebar')
   <!-- Left side column. contains the logo and sidebar -->
-    @include('admin.layouts.navbars.sidebar')
+  @include('admin.layouts.navbars.navbar')
 
     <section class="content">
         @yield('content')
