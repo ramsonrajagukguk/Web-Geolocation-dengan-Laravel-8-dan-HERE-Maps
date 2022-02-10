@@ -22,10 +22,11 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="{{ url('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
+  <link href="{{ url('assets/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" >
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ url('assets/css/soft-ui-dashboard.css?v=1') }}" rel="stylesheet" />
   <!-- Alpine -->
-  {{-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script> --}}
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">

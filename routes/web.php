@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\Beranda;
+use App\Http\Controllers\Admin\Buku;
+use App\Http\Controllers\Admin\Datacontroller;
+use App\Http\Controllers\Admin\Penulis;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,6 +27,11 @@ Route::get('/', function () {
 
 Route::middleware('auth')-> group(function () {
     Route::get('/admin', [Beranda::class,'index'])->name('beranda');
+    Route::get('/admin/buku', [Buku::class,'index'])->name('buku');
+    Route::get('/admin/penulis', [Penulis::class,'index'])->name('penulis');
+    Route::delete('/admin/penulis/{penulis}', [Penulis::class,'destroy'])->name('penulis.destroy');
+
+    Route::get('/admin/penulis/data', [Datacontroller::class,'penulis'])->name('penulis.data');
     
 });
 
