@@ -29,7 +29,7 @@ Route::middleware('auth')-> group(function () {
     Route::get('/admin', [Beranda::class,'index'])->name('beranda');
     Route::get('/admin/buku', [Buku::class,'index'])->name('buku');
     Route::get('/admin/penulis', [Penulis::class,'index'])->name('penulis');
-    Route::delete('/admin/penulis/{penulis}', [Penulis::class,'destroy'])->name('penulis.destroy');
+    Route::delete('/admin/penulis/{id}', [Penulis::class,'destroy'])->name('penulis.destroy');
 
     Route::get('/admin/penulis/data', [Datacontroller::class,'penulis'])->name('penulis.data');
     
