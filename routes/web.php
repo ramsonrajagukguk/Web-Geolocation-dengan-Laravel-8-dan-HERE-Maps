@@ -28,8 +28,15 @@ Route::post('/buku/pinjam/{id}', [BerandaController::class,'pinjam'])->name('buk
 
 Route::middleware('auth')-> group(function () {
     Route::get('/admin', [Beranda::class,'index'])->name('beranda');
+<<<<<<< HEAD
     Route::resource('admin/penulis', PenulisController::class);
     Route::resource('admin/buku', BooksController::class);
+=======
+    Route::get('/admin/buku', [Buku::class,'index'])->name('buku');
+    Route::get('/admin/penulis', [Penulis::class,'index'])->name('penulis');
+    Route::delete('/admin/penulis/{id}', [Penulis::class,'destroy'])->name('penulis.destroy');
+
+>>>>>>> 729cec22e36d02664ab1a790e762808628ae069b
     Route::get('/admin/penulis/data', [Datacontroller::class,'penulis'])->name('penulis.data');
 
     Route::get('/admin/daftarpinjam',[Beranda::class,'daftar_pinjam'])->name('daftarpinjam');
