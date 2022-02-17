@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\Beranda;
+use App\Http\Controllers\Admin\BooksController;
 use App\Http\Controllers\Admin\Buku;
 use App\Http\Controllers\Admin\Datacontroller;
-use App\Http\Controllers\Admin\Penulis;
+use App\Http\Controllers\Admin\PenulisController;
+use App\Http\Controllers\BerandaController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,20 +20,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [BerandaController::class,'index'])->name('home');
+Route::get('/buku/{id}', [BerandaController::class,'show'])->name('buku');
+Route::post('/buku/pinjam/{id}', [BerandaController::class,'pinjam'])->name('buku.pinjam')->middleware('auth');
 
 
 
 Route::middleware('auth')-> group(function () {
     Route::get('/admin', [Beranda::class,'index'])->name('beranda');
-    Route::get('/admin/buku', [Buku::class,'index'])->name('buku');
-    Route::get('/admin/penulis', [Penulis::class,'index'])->name('penulis');
-    Route::delete('/admin/penulis/{penulis}', [Penulis::class,'destroy'])->name('penulis.destroy');
-
+    Route::resource('admin/penulis', PenulisController::class);
+    Route::resource('admin/buku', BooksController::class);
     Route::get('/admin/penulis/data', [Datacontroller::class,'penulis'])->name('penulis.data');
+
+    Route::get('/admin/daftarpinjam',[Beranda::class,'daftar_pinjam'])->name('daftarpinjam');
+    Route::get('/admin/listpinjam',[Beranda::class,'list_pinjam'])->name('listpinjam');
+    Route::patch('/admin/returnBook/{id}',[Beranda::class,'returnBook'])->name('returnBook');
     
 });
 

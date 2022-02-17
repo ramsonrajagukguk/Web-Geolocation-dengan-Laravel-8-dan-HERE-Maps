@@ -2,59 +2,84 @@
 
 @section('content')
 <div class="container-fluid py-4">
-<div class="row">
+  <div class="row">
     <div class="col-12">
       <div class="card mb-4">
-        <div class="card-header pb-0">
-          <h6>Daftar Buku</h6>
-        </div>
-        <div class="card-body px-0 pt-0 pb-2">
-          <div class="table-responsive p-0">
-            <table class="table align-items-center mb-0">
-              <thead>
-                <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Author</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employed</th>
-                  <th class="text-secondary opacity-7"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">John Michael</h6>
-                        <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">Manager</p>
-                    <p class="text-xs text-secondary mb-0">Organization</p>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-success">Online</span>
-                  </td>
-                  <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
-                  </td>
-                  <td class="align-middle">
-                    <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+         <div class="card-header pb-3">
+              <div class="d-flex flex-row justify-content-between">
+                      <h5 class="mb-0 ps-4">Daftar Buku</h5>
+                  <a href="{{ route('buku.create') }}" class="btn bg-gradient-primary btn-sm mb-0" type="button">+&nbsp; Buku Baru</a>
+              </div>
+          </div>
+            <div class="card-body px-4 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                  <table id="dataTable" class="table align-items-center mb-0">
+                      <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cover</th>
+                        <th class="text-center text-uppercase text-start text-secondary text-xxs font-weight-bolder opacity-7">Judul</th>
+                        <th class="text-center text-uppercase text-start text-secondary text-xxs font-weight-bolder opacity-7">Penulis</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($data as $buku )
+                      <tr>
+                        <td class="text-center" style="width: 20px">
+                          <p class="text-xs  font-weight-bold mb-0">{{ $loop->iteration }}</p>
+                        </td>
+                        <td>
+                          <div class="d-flex px-2 py-1">
+                            <div>
+                              {{-- <img src="{{ asset('assets/img/kal-visuals-square.jpg') }}" class="avatar avatar-sm me-3"> --}}
+                              <img src="{{ Storage::url($buku->cover) }}" class="avatar avatar-lg me-3">
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-start">
+                          <p class="text-xs font-weight-bold mb-0">{{ $buku->judul }}</p>
+                      </td>
+                        <td class="text-start">
+                          <p class="text-xs font-weight-bold mb-0">
+                            @foreach ($penulis as $item)
+                            @if ($item->id == $buku->penulis_id)
+                            {{ $item->name }}
+                            @endif
+                            @endforeach
+                          </p>
+                      </td>
+                        <td class="align-middle text-center">
+                          <form action="{{ route('buku.destroy', $buku->id) }}"
+                            method="post">
+                            @csrf
+                            @method('delete')
+                            <a href="{{ route('buku.edit', $buku) }}"
+                                class="btn btn-success px-3 btn-sm"><i
+                                    class="nav-icon fas fa-edit fs-6"></i>
+                            </a>
+    
+                            <button class="btn btn-danger px-3 btn-sm"><i
+                                    class="nav-icon fas fa-trash-alt fs-6"></i></button>
+                        </form>
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 @endsection
+
+@push('scripts')
+<script>
+   $("#dataTable").DataTable({
+      "responsive": true,
+      "autoWidth": true,
+    });
+</script>
+@endpush

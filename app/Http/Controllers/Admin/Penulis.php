@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Penulis as ModelsPenulis;
 use Illuminate\Http\Request;
 
 class Penulis extends Controller
@@ -14,7 +15,8 @@ class Penulis extends Controller
      */
     public function index()
     {
-        return view('admin.penulis.index');
+        $penulis = ModelsPenulis::all();
+        return view('admin.penulis.index',compact('penulis'));
     }
 
     /**
@@ -78,9 +80,9 @@ class Penulis extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Penulis $penulis)
+    public function destroy(ModelsPenulis $id)
     {
-        $penulis->delete();
+        $id->delete();
         return redirect()->route('penulis');
     }
 }
