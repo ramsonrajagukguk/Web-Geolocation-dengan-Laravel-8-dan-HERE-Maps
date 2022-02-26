@@ -14,7 +14,7 @@ class BookFactory extends Factory
      */
     public function definition()
     {
-        $cover ="buku/home-decor-1.jpg";
+        $cover ="buku/php.jpg";
         return [
             'author_id' => Author::inRandomOrder()->first()->id,
             'judul' => $this->faker->sentence(mt_rand(2,4)),

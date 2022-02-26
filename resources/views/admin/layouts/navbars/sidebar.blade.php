@@ -40,8 +40,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'buku.index' ? 'active' : '' }}"
-                    href="{{ route('buku.index') }}">
+                <a class="nav-link {{ Route::currentRouteName() == 'buku' ? 'active' : '' }}"
+                    href="{{ route('buku') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-money-coins fs-6 text-dark"></i>
@@ -51,7 +51,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link  {{ Route::currentRouteName() == 'penulis' ? 'active' : '' }} "
-                    href="{{ route('penulis.index') }}">
+                    href="{{ route('penulis') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-users text-dark fs-5"></i>
@@ -87,7 +87,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  " href="../pages/virtual-reality.html">
+                <a class="nav-link {{ Route::currentRouteName() == 'admin/space' ? 'active' : '' }}  " href="{{ route('space.index') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -112,7 +112,7 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Virtual Reality</span>
+                    <span class="nav-link-text ms-1">Spaces</span>
                 </a>
             </li>
             <li class="nav-item">

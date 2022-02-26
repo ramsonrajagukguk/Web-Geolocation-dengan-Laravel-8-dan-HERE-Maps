@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Buku;
 use App\Http\Controllers\Admin\Datacontroller;
 use App\Http\Controllers\Admin\PenulisController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\Admin\SpaceController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,6 +42,11 @@ Route::middleware('auth')-> group(function () {
     Route::get('/admin/daftarpinjam',[Beranda::class,'daftar_pinjam'])->name('daftarpinjam');
     Route::get('/admin/listpinjam',[Beranda::class,'list_pinjam'])->name('listpinjam');
     Route::patch('/admin/returnBook/{id}',[Beranda::class,'returnBook'])->name('returnBook');
+    
+  
+    Route::resource('/admin/space',SpaceController::class);
+
+    
     
 });
 
