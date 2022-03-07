@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [BerandaController::class,'index'])->name('home');
+// Route::get('/space', [SpaceController::class,'index'])->name('space');
 Route::get('/buku/{id}', [BerandaController::class,'show'])->name('buku');
 Route::post('/buku/pinjam/{id}', [BerandaController::class,'pinjam'])->name('buku.pinjam')->middleware('auth');
 

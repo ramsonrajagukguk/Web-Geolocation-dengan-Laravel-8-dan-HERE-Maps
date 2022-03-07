@@ -47,4 +47,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Book::class, 'author_books')->withTimestamps();
     }
+
+
+  
+    public function spaces()
+    {
+        return $this->hasMany(Space::class, 'user_id', 'id');
+    }
 }

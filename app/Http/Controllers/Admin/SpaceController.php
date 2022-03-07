@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Space;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\This;
 
 class SpaceController extends Controller
@@ -16,7 +18,9 @@ class SpaceController extends Controller
      */
     public function index()
     {
-        return view('admin.space.index');    
+        $spaces = Space::orderBy('created_at','DESC')->paginate(4);
+        return view('admin.space.index',compact('spaces'));    
+        // return view('space');
     }
 
     /**
@@ -39,10 +43,34 @@ class SpaceController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            'address' => 'required',
+            'addres' => 'required',
             'description' => 'required',
-            'latitude' => 'required',
+            'lotitude' => 'required',
+            'longitude' => 'required',
+            'photo' => 'required',
+            'photo.*' => ['mimes:jpg,png'],
         ]);
+
+        $user = auth()->user();
+  
+
+       $space = $user->spaces()->create($request->except('photo'));
+
+           
+        
+        $spacePhotos=[];
+
+        foreach ($request->file('photo') as $file) {
+           $path= Storage::disk('public')->putFile('spaces',$file);
+           $spacePhotos[] =[
+               'space_id' => $space->id,
+               'path'   => $path
+           ];
+        }
+        
+        $space->photos()->insert($spacePhotos);
+
+        return redirect()->route('space.index')->with('success', 'Space created');
     }
 
     /**
@@ -51,9 +79,9 @@ class SpaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Space $space)
     {
-        //
+        return view('admin.space.show',compact('space'));
     }
 
     /**
