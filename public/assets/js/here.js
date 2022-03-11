@@ -1,116 +1,189 @@
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-        localCoord = position.coords;
+    //jika navigator tersedia
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+} else {
+    //jika navigator tidak tersedia
+    console.log("Geolocation is not supported by this device");
+}
 
-        objLocalCoord = {
-            lat: localCoord.latitude,
-            lng: localCoord.longitude,
-        };
+//jika location allowed
+function showPosition(position) {
+    localCoord = position.coords;
+    objLocalCoord = {
+        lat: localCoord.latitude,
+        lng: localCoord.longitude,
+    };
 
-        let platform = new H.service.Platform({
-            apikey: window.hereApiKey,
+    let platform = new H.service.Platform({
+        apikey: "QymcgCMbysQyyAzi3rTMINJy_hBU6wi_rh88B_tq02w",
+    });
+    let defaultLayers = platform.createDefaultLayers();
+    let map = new H.Map(
+        document.getElementById("mapContainer"),
+        defaultLayers.vector.normal.map,
+        {
+            center: objLocalCoord,
+            zoom: 13,
+            pixelRatio: window.devicePixelRatio || 1,
+        }
+    );
+
+    window.addEventListener("resize", () => map.getViewPort().resize());
+    let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    let ui = H.ui.UI.createDefault(map, defaultLayers);
+
+    function addDraggableMarker(map, behavior) {
+        let inputlat = document.getElementById("lat");
+        let inputlng = document.getElementById("lng");
+
+        if (inputlat.value != "" && inputlng.value != "") {
+            objLocalCoord = {
+                lat: inputlat.value,
+                lng: inputlng.value,
+            };
+        }
+
+        var marker = new H.map.Marker(objLocalCoord, {
+            // mark the object as volatile for the smooth dragging
+            volatility: true,
         });
+        // Ensure that the marker can receive drag events
+        marker.draggable = true;
+        map.addObject(marker);
 
-        // Obtain the default map types from the platform object
-        let defaultlayers = platform.createDefaultLayers();
-
-        // Instantiate (and display) a map object:
-        let map = new H.Map(
-            document.getElementById("mapContainer"),
-            defaultlayers.vector.normal.map,
-            {
-                zoom: 13,
-                center: objLocalCoord,
-                pixelRatio: window.devicePixelRatio || 1,
-            }
+        // disable the default draggability of the underlying map
+        // and calculate the offset between mouse and target's position
+        // when starting to drag a marker object:
+        map.addEventListener(
+            "dragstart",
+            function (ev) {
+                var target = ev.target,
+                    pointer = ev.currentPointer;
+                if (target instanceof H.map.Marker) {
+                    var targetPosition = map.geoToScreen(target.getGeometry());
+                    target["offset"] = new H.math.Point(
+                        pointer.viewportX - targetPosition.x,
+                        pointer.viewportY - targetPosition.y
+                    );
+                    behavior.disable();
+                }
+            },
+            false
         );
 
-        window.addEventListener("resize", () => map.getViewPort().resize());
+        // re-enable the default draggability of the underlying map
+        // when dragging has completed
+        map.addEventListener(
+            "dragend",
+            function (ev) {
+                var target = ev.target;
+                if (target instanceof H.map.Marker) {
+                    behavior.enable();
 
-        let ui = H.ui.UI.createDefault(map, defaultlayers);
-        let mapevents = new H.mapevents.Mapevents(map);
-        let behavior = new H.mapevents.Behavior(mapevents);
+                    let resultCoord = map.screenToGeo(
+                        ev.currentPointer.viewportX,
+                        ev.currentPointer.viewportY
+                    );
 
-        function addDragableMarker(map, behavior) {
-            let inputlat = document.getElementById("lat");
-            let inputlng = document.getElementById("lng");
+                    inputlat.value = resultCoord.lat;
+                    inputlng.value = resultCoord.lng;
+                }
+            },
+            false
+        );
 
-            if (inputlat.value != "" && inputlng.value != "") {
-                objLocalCoord = {
-                    lat: inputlat.value,
-                    lng: inputlng.value,
-                };
-            }
+        // Listen to the drag event and move the position of the marker
+        // as necessary
+        map.addEventListener(
+            "drag",
+            function (ev) {
+                var target = ev.target,
+                    pointer = ev.currentPointer;
+                if (target instanceof H.map.Marker) {
+                    target.setGeometry(
+                        map.screenToGeo(
+                            pointer.viewportX - target["offset"].x,
+                            pointer.viewportY - target["offset"].y
+                        )
+                    );
+                }
+            },
+            false
+        );
+    }
 
-            let marker = new H.map.Marker(objLocalCoord, {
-                volatility: true,
-            });
+    if ((window.action = "submit")) {
+        addDraggableMarker(map, behavior);
+    }
 
-            // marker.draggable = true;
-            map.addObject(marker);
-            map.setCenter(coords);
-
-            map.addEventListener(
-                "dragstart",
-                function (ev) {
-                    let target = ev.target,
-                        pointer = ev.currentPointer;
-
-                    if (target instanceof H.map.Marker) {
-                        let targetPosition = map.geoToScreen(
-                            target.getGeometry()
-                        );
-                        terget["offset"] = new H.math.Point(
-                            pointer.viewportX - targetPosition.x,
-                            pointer.viewportY - targetPosition.y
-                        );
-                        behavior.disable();
-                    }
-                },
-                false
+    // Browse location codespace
+    let spaces = [];
+    const fetchSpaces = function (latitude, longitude, radius) {
+        return new Promise(function (resolve, reject) {
+            resolve(
+                fetch(
+                    `/api/spaces?lat=${latitude}&lng=${longitude}&rad=${radius}`
+                )
+                    .then((res) => res.json())
+                    .then(function (data) {
+                        data.forEach(function (value, index) {
+                            let marker = new H.map.Marker({
+                                lat: value.latitude,
+                                lng: value.longitude,
+                            });
+                            spaces.push(marker);
+                        });
+                    })
             );
+        });
+    };
 
-            map.addEventListener(
-                "drag",
-                function (ev) {
-                    let target = ev.target,
-                        pointer = ev.currentPointer;
+    function clearSpace() {
+        map.removeObjects(spaces);
+        spaces = [];
+    }
 
-                    if (target instanceof H.map.Marker) {
-                        terget.setGeometry(
-                            map.screenToGeo(
-                                pointer.viewportX - terget["offset"].x,
-                                pointer.viewportY - terget["offset"].y
-                            )
-                        );
-                    }
-                },
-                false
-            );
+    function init(latitude, longitude, radius) {
+        clearSpace();
+        fetchSpaces(latitude, longitude, radius).then(function () {
+            map.addObjects(spaces);
+        });
+    }
 
-            map.addEventListener(
-                "dragend",
-                function (ev) {
-                    let target = ev.target;
+    if (window.action == "browse") {
+        map.addEventListener(
+            "dragend",
+            function (ev) {
+                let resultCoord = map.screenToGeo(
+                    ev.currentPointer.viewportX,
+                    ev.currentPointer.viewportY
+                );
+                init(resultCoord.lat, resultCoord.lng, 40);
+            },
+            false
+        );
 
-                    if (target instanceof H.map.Marker) {
-                        behavior.enable();
-                        let resultCoord = map.screenToGeo(
-                            ev.currentPointer.viewportX,
-                            ev.currentPointer.viewportY
-                        );
+        init(objLocalCoord.lat, objLocalCoord.lng, 40);
+    }
 
-                        inputlat.value = resultCoord.lat;
-                        inputlng.value = resultCoord.lng;
-                    }
-                },
-                false
-            );
-        }
-        if (window.action == "submit") {
-            addDragableMarker(map, behavior);
-        }
-    });
-} else {
-    console.error("Geolocatin not support thi browser");
+    // Route to space
+    let urlParams = new URLSearchParams(window.location.search);
+}
+
+//jika location disabled atau not allowed
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+            break;
+    }
 }

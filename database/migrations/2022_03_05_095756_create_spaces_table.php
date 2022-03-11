@@ -17,13 +17,15 @@ class CreateSpacesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('title');
-            $table->text('addres');
+            $table->text('address');
             $table->text('description');
-            $table->string('lotitude');
+            $table->string('latitude');
             $table->string('longitude');
+            $table->string('foto');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('CASCADE')
+            ->onDelete('CASCADE');
         });
     }
 

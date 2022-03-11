@@ -1,9 +1,5 @@
 @extends('admin.app')
 
-@push('style')
-
-@endpush
-
 @section('content')
 <div class="container py-4">
     <div class="row">
@@ -11,17 +7,18 @@
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <div class="d-flex flex-row justify-content-between">
-                        <h5 class="mb-2 ">Tambah Baru</h5>
+                        <h5 class="mb-2 ">Update Spaces</h5>
                         <a href="{{ route('space.index') }}" class="btn btn-outline-secondary btn-sm mb-0" type="button"><i class="fa fa-angle-double-left text-sm">&nbsp;Kembali</i></a>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('space.store') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('space.update',$space) }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            @method('PATCH')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Judul') }}</label>
-                                        <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" placeholder="Masukkan title">
+                                        <input type="text" value="{{ $space->title }}" class="form-control @error('title') is-invalid @enderror" name="title" placeholder="Masukkan title">
                                         @error('title') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
@@ -30,7 +27,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Alamat') }}</label>
-                                        <textarea name="addres" cols="30" rows="2" class="form-control @error('addres') is-invalid @enderror" placeholder="Tuliskan deskripsi ">Alamat</textarea>
+                                        <textarea name="addres" cols="30" rows="2" class="form-control @error('addres') is-invalid @enderror" placeholder="Alamat">{{ $space->addres }}</textarea>
                                         @error('addres') <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -40,7 +37,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Keterangan') }}</label>
-                                        <textarea name="description" cols="30" rows="3" class="form-control @error('description') is-invalid @enderror" placeholder="Tuliskan deskripsi ">Keterangan</textarea>
+                                        <textarea name="description" cols="30" rows="3" class="form-control @error('description') is-invalid @enderror" placeholder="Keterangan ">{{ $space->description }}</textarea>
                                         @error('description') <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -53,14 +50,14 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="form-control-label">{{ __('Location') }}</label>
-                                            <input name="latitude" id="lat" class="form-control @error('latitude') is-invalid @enderror" value="{{ old('latitude') }}">
+                                            <input name="latitude" id="lat" class="form-control @error('latitude') is-invalid @enderror" value="{{ $space->latitude}}">
                                             @error('latitude') <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label class="form-control-label">{{ __('Longitude') }}</label>
-                                            <input name="longitude" id="lng" class="form-control @error('longitude') is-invalid @enderror" value="{{ old('longitude') }}">
+                                            <input name="longitude" id="lng" class="form-control @error('longitude') is-invalid @enderror" value="{{$space->longitude}}">
                                             @error('longitude') <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -86,7 +83,7 @@
                                 </div>
                                 <div class="d-flex justify-content-start">
                                     <button type="submit" class="btn bg-gradient-primary btn-md mt-4 mb-4">{{
-                                        'Simpan' }}</button>
+                                        'Update' }}</button>
                                 </div>
                         </form>
                     </div>

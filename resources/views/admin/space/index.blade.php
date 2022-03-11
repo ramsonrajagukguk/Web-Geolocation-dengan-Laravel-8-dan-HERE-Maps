@@ -11,7 +11,7 @@
                         </div>
                         <div id="view-space">
                             <a href="{{ route('space.index') }}" class="btn btn-secondary"><i class="fas fa-list"></i></a>
-                            <a href="" class="btn btn-info"><i class="fas fa-globe"></i></a>
+                            <a href="{{ route('browse') }}" class="btn btn-info"><i class="fas fa-globe"></i></a>
                         </div>
                     </div>
                 </div>
@@ -21,18 +21,20 @@
                         <div class="col-12 mx-auto">
                             <div class="row py-lg-7 py-5">
                                 <div class="col-lg-3 col-md-5 position-relative my-auto">
-                                    <img class="img border-radius-lg max-width-400 w-100 position-relative z-index-2" src="{{ Storage::url($space->cover) }}" alt="bruce">
+                                    {{-- <img class="img border-radius-lg max-width-400 w-100 position-relative z-index-2" src="{{ Storage::url($space->photos->path) }}" alt="bruce"> --}}
                                 </div>
                                 <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mt-sm-0 mt-4">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h4 class="mb-0">{{ $space->title }}</h4>
                                         <div class="d-block">
-                                            <form action="{{ route('space.destroy', $space) }}" method="POST">
+                                            @if ($space->user_id == Auth::user()->id)
+                                            <form action="{{ route('space.destroy',$space->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="Submit" class="btn btn-sm btn-outline-danger text-nowrap mb-0">Hapus</button>
-
-                                                <a href="" class="btn btn-sm btn-outline-info text-nowrap mb-0">Edit</a>
+                                                <a href="{{ route('space.edit',$space) }}" class="btn btn-sm btn-outline-info text-nowrap mb-0">Edit</a>
+                                            </form>
+                                            @endif
                                         </div>
                                     </div>
                                     {{-- <div class="row mb-4">
@@ -48,9 +50,9 @@
                             </blockquote>
                             <a href="{{ route('space.show',$space) }}">Link Deskripsi</a>
                         </div>
+                        @endforeach
                     </div>
                 </div>
-                @endforeach
             </div>
             <div class="row justify-content-center">
                 {{ $spaces->links('pagination::bootstrap-4')}}

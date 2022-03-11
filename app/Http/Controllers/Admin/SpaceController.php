@@ -45,7 +45,7 @@ class SpaceController extends Controller
             'title' => 'required|max:255',
             'addres' => 'required',
             'description' => 'required',
-            'lotitude' => 'required',
+            'latitude' => 'required',
             'longitude' => 'required',
             'photo' => 'required',
             'photo.*' => ['mimes:jpg,png'],
@@ -84,15 +84,35 @@ class SpaceController extends Controller
         return view('admin.space.show',compact('space'));
     }
 
+
+
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function browse()
+    {
+        return view('admin.space.browse');
+    }
+
+    
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Space $space)
     {
-        //
+
+        if($space->user_id != request()->user()->id){
+            return redirect()->back();
+        }
+        return view('admin.space.edit',compact('space'));
+
     }
 
     /**
@@ -102,9 +122,39 @@ class SpaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Space $space)
     {
-        //
+        // if($space->user_id != request()->user()->id){
+        //     return redirect()->back();
+        // }
+
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'addres' => 'required',
+            'description' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            // 'photo' => 'required',
+            // 'photo.*' => ['mimes:jpg,png'],
+        ]);
+
+  
+       $space->update($request->except('photo'));
+
+        
+        $spacePhotos=[];
+
+        foreach ($request->file('photo') as $file) {
+           $path= Storage::disk('public')->putFile('spaces',$file);
+           $spacePhotos[] =[
+               'space_id' => $space->id,
+               'path'   => $path
+           ];
+        }
+        
+        $space->photos()->insert($spacePhotos);
+
+        return redirect()->route('space.index')->with('success', 'Space updated');
     }
 
     /**
@@ -113,8 +163,9 @@ class SpaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Space $space)
     {
-        //
+        $space->delete();
+        return redirect()->route('space.index')->with('success', 'Space deleted');
     }
 }

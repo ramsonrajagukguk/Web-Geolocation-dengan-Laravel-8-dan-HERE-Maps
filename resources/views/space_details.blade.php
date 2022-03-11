@@ -71,7 +71,7 @@
         </div>
     </div>
     <header class="header-2">
-        <div class="page-header min-vh-50 relative" style="background-image: url('./assets/img/curved.jpg')">
+        <div class="page-header min-vh-50 relative" style="background-image: url('../assets/img/curved.jpg')">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-7 text-center mx-auto">
@@ -100,46 +100,34 @@
     <section class="pt-3 pb-4">
         <div class="container">
             <div class="col-12 mt-4">
-                <div class="card mb-4">
-                    {{-- <div class="card-header pb-0 p-3">
-                        <h6 class="mb-1">Web-Geolocation</h6>
-                    </div> --}}
-                    <div class="card-body p-3">
-                        <div class="row">
-                            @foreach ($spaces as $space)
-                            <div class="col-xl-3 col-md-6 mb-xl-0 mt-4 mb-5">
-                                <div class="card card-blog card-plain">
-                                    <div class="position-relative">
-                                        <a class="d-block shadow-xl border-radius-xl">
-                                            <img src="{{ Storage::url($space->cover) }}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
-                                        </a>
-                                    </div>
-                                    <div class="card-body px-1 pb-0">
-                                        <a href="{{ route('space.details', $space) }}">
-                                            <h6>{{ Str::limit($space->title, 30) }}</h6>
-                                        </a>
-                                        <p class="text-gradient text-dark mb-2 text-sm">
-                                            {{ Str::limit($space->addres, 50) }}</p>
-                                        <div class="d-flex align-spaces-center justify-content-between">
-                                            <form action="{{ route('buku.pinjam', $space) }}" method="POST">
-                                                @csrf
-                                                <button type="Submit" class="btn btn-outline-primary btn-sm mb-0">Details</button>
-                                            </form>
-                                        </div>
-                                    </div>
+                <div class="card-body px-3 pt-0 pb-2">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-6 mb-xl-0 mt-4 mb-5">
+                            <div class="card card-blog card-plain">
+                                <div class="d-flex justify-content-between">
+                                    @foreach ($space->photos as $photo )
+                                    <a class="d-block shadow-xl border-radius-xl">
+                                        <img src="{{ Storage::url($photo->path) }}" alt="img-blur-shadow" style="width: 250px" class="img-fluid shadow border-radius-xl">
+                                    </a>
+                                    @endforeach
+                                </div>
+
+                                <div class="card-body px-1 pb-0">
+
+                                    <h6>{{ $space->title }}</h6>
+
+                                    <p class="text-gradient text-dark mb-2 text-sm">
+                                        {{ $space->addres}}</p>
+                                    <p class="text-gradient text-dark mb-2 text-sm">
+                                        {{ $space->description }}</p>
                                 </div>
                             </div>
-                            @endforeach
                         </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        {{ $spaces->links('pagination::bootstrap-4')}}
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
 
     <!-- -------   END PRE-FOOTER 2 - simple social line w/ title & 3 buttons    -------- -->
     <footer class="footer pt-5 mt-2">
@@ -166,12 +154,6 @@
     <script src="{{ asset('assets/js/plugins/toastr.min.js') }}" type="text/javascript"></script>
     <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="{{ asset('assets/js/soft-design-system.min.js') }}" type="text/javascript"></script>
-    @if (Session::has('success'))
-    <script>
-        toastr.success("{{ Session('success') }}");
-
-    </script>
-    @endif
 </body>
 
 </html>

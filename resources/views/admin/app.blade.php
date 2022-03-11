@@ -57,6 +57,7 @@
   </section>
 
   @include('admin.layouts.footers.footer')
+  
   @if (Session::has('success'))
   <script>
     toastr.success("{{ Session('success') }}");
