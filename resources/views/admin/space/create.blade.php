@@ -66,6 +66,15 @@
                                         </div>
 
                                         <div class="form-group increment">
+                                            <label class="form-control-label">{{ __('Photo Depan') }}</label>
+                                            <div class="input-group mb-4">
+                                                <input class="form-control @error('photoutama') is-invalid @enderror" name="photoutama" type="file">
+                                            </div>
+                                            @error('photoutama') <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group increment">
                                             <label class="form-control-label">{{ __('Photo') }}</label>
                                             <div class="input-group mb-4">
                                                 <input class="form-control @error('photo') is-invalid @enderror" name="photo[]" type="file">
