@@ -111,7 +111,7 @@
                                 <div class="card card-blog card-plain">
                                     <div class="position-relative">
                                         <a class="d-block shadow-xl border-radius-xl">
-                                            <img src="{{ Storage::url($space->cover) }}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                                            <img src="{{ Storage::url($space->photoutama) }}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
                                         </a>
                                     </div>
                                     <div class="card-body px-1 pb-0">

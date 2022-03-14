@@ -41,23 +41,30 @@ class SpaceController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $data = $request->validate([
             'title' => 'required|max:255',
-            'addres' => 'required',
+            'address' => 'required',
             'description' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
-            'photo' => 'required',
-            'photo.*' => ['mimes:jpg,png'],
+            'photoutama'      =>'required|mimes:jpg,png',
+            // 'photo' => 'required',
+            // 'photo.*' => ['mimes:jpg,png'],
         ]);
 
         $user = auth()->user();
-  
 
-       $space = $user->spaces()->create($request->except('photo'));
-
-           
+        if ($request->file('photoutama')) {
+            $data['photoutama'] = $request->file('photoutama')->store('public/spaces');
+        } 
         
+        // $data['user_id'] = $user;
+  
+        
+        // Space::create($data);
+        
+        $space = $user->spaces()->create($data);
+
         $spacePhotos=[];
 
         foreach ($request->file('photo') as $file) {
@@ -67,6 +74,7 @@ class SpaceController extends Controller
                'path'   => $path
            ];
         }
+
         
         $space->photos()->insert($spacePhotos);
 
@@ -79,9 +87,11 @@ class SpaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Space $space)
+    public function show(Request $request,  $id)
     {
-        return view('admin.space.show',compact('space'));
+        // return view('admin.space.show',compact('space'));
+        $space= Space::findOrFail($id);
+        return view('admin.space.route_space',compact('space'));
     }
 
 

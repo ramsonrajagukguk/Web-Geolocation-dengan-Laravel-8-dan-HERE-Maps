@@ -20,8 +20,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">{{ __('Judul') }}</label>
-                                        <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" placeholder="Masukkan title">
+                                        <label class="form-control-label">{{ __('Nama Tempat') }}</label>
+                                        <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" placeholder="Masukkan nama tempat">
                                         @error('title') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
@@ -30,8 +30,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Alamat') }}</label>
-                                        <textarea name="addres" cols="30" rows="2" class="form-control @error('addres') is-invalid @enderror" placeholder="Tuliskan deskripsi ">Alamat</textarea>
-                                        @error('addres') <div class="text-danger">{{ $message }}</div>
+                                        <textarea name="address" cols="30" rows="2" class="form-control @error('address') is-invalid @enderror" placeholder="Tuliskan deskripsi ">{{ old('address') }}</textarea>
+                                        @error('address') <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Keterangan') }}</label>
-                                        <textarea name="description" cols="30" rows="3" class="form-control @error('description') is-invalid @enderror" placeholder="Tuliskan deskripsi ">Keterangan</textarea>
+                                        <textarea name="description" cols="30" rows="3" class="form-control @error('description') is-invalid @enderror" placeholder="Tuliskan deskripsi ">{{ old('description') }}</textarea>
                                         @error('description') <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -65,10 +65,10 @@
                                             @enderror
                                         </div>
 
-                                        <div class="form-group increment">
+                                        <div class="form-group">
                                             <label class="form-control-label">{{ __('Photo Depan') }}</label>
                                             <div class="input-group mb-4">
-                                                <input class="form-control @error('photoutama') is-invalid @enderror" name="photoutama" type="file">
+                                                <input class="form-control @error('photoutama') is-invalid @enderror" value="{{ old('photoutama') }}" name="photoutama" type="file">
                                             </div>
                                             @error('photoutama') <div class="text-danger">{{ $message }}</div>
                                             @enderror

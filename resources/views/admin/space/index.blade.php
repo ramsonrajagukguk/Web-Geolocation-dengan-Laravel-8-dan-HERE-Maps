@@ -37,37 +37,31 @@
                                             @endif
                                         </div>
                                     </div>
-                                    {{-- <div class="row mb-4">
-                                        <div class="col-auto">
-                                            <span>Penulis</span>
-                                            <span class="h6">{{ $space->user->name }}</span>
-                                </div>
-                            </div> --}}
-                            <p>{{ $space->addres }}</p>
+                                    <p>{{ $space->addres }}</p>
 
-                            <blockquote>
-                                {{ $space->description }}
-                            </blockquote>
-                            <a href="{{ route('space.show',$space) }}">Link Deskripsi</a>
+                                    <blockquote>
+                                        {{ $space->description }}
+                                    </blockquote>
+                                    <a href="#" class="dange dange-info" onclick="openDirection({{ $space->latitude }},{{ $space->longitude }},{{ $space->id }})">Link Deskripsi</a>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
-                        @endforeach
+                    </div>
+                    <div class="row justify-content-center">
+                        {{ $spaces->links('pagination::bootstrap-4')}}
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                {{ $spaces->links('pagination::bootstrap-4')}}
-            </div>
         </div>
-    </div>
-</div>
-@endsection
+        @endsection
 
-@push('scripts')
-<script>
-    $("#dataTable").DataTable({
-        "responsive": true
-        , "autoWidth": false
-    , });
+        @push('scripts')
+        <script>
+            $("#dataTable").DataTable({
+                "responsive": true
+                , "autoWidth": false
+            , });
 
-</script>
-@endpush
+        </script>
+        @endpush
