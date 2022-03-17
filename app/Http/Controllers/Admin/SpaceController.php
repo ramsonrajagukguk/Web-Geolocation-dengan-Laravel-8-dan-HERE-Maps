@@ -58,11 +58,7 @@ class SpaceController extends Controller
             $data['photoutama'] = $request->file('photoutama')->store('public/spaces');
         } 
         
-        // $data['user_id'] = $user;
-  
-        
-        // Space::create($data);
-        
+           
         $space = $user->spaces()->create($data);
 
         $spacePhotos=[];
@@ -134,35 +130,44 @@ class SpaceController extends Controller
      */
     public function update(Request $request,Space $space)
     {
-        // if($space->user_id != request()->user()->id){
-        //     return redirect()->back();
-        // }
+    
 
-        $this->validate($request, [
+        $data = $request->validate([
             'title' => 'required|max:255',
-            'addres' => 'required',
+            'address' => 'required',
             'description' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
+            'photoutama'      =>'required|mimes:jpg,png',
             // 'photo' => 'required',
             // 'photo.*' => ['mimes:jpg,png'],
         ]);
 
+        $user = auth()->user();
+
+        if ($request->file('photoutama')) {
+            if ($request->oldimage) {
+                Storage::delete($request->oldImage);
+            }
+            $data['photoutama'] = $request->file('photoutama')->store('public/spaces');
+        } 
+        
+           
   
-       $space->update($request->except('photo'));
+        $user->spaces()->update($data);
 
         
-        $spacePhotos=[];
+        // $spacePhotos=[];
 
-        foreach ($request->file('photo') as $file) {
-           $path= Storage::disk('public')->putFile('spaces',$file);
-           $spacePhotos[] =[
-               'space_id' => $space->id,
-               'path'   => $path
-           ];
-        }
+        // foreach ($request->file('photo') as $file) {
+        //    $path= Storage::disk('public')->putFile('spaces',$file);
+        //    $spacePhotos[] =[
+        //        'space_id' => $space->id,
+        //        'path'   => $path
+        //    ];
+        // }
         
-        $space->photos()->insert($spacePhotos);
+        // $space->photos()->insert($spacePhotos);
 
         return redirect()->route('space.index')->with('success', 'Space updated');
     }

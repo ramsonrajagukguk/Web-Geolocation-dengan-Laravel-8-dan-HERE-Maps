@@ -24,18 +24,37 @@
                                     <div style="width: 100%; height: 500px" id="mapContainer"></div>
                                 </div>
 
-
-
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ Storage::url($space->photoutama) }}" alt="img-blur-shadow" style="width: 250px" class="img-fluid shadow border-radius-xl">
+                                <div class="d-flex justify-content-center mb-4">
+                                    <img src="{{ Storage::url($space->photoutama) }}" alt="img-blur-shadow" style="width: 500px" class="img-fluid shadow border-radius-xl">
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    @foreach ($space->photos as $photo )
-                                    <a class="d-block shadow-xl border-radius-xl">
-                                        <img src="{{ Storage::url($photo->path) }}" alt="img-blur-shadow" style="width: 250px" class="img-fluid shadow border-radius-xl">
-                                    </a>
-                                    @endforeach
+                                <div class="row">
+                                    <div class="col-md-8 mx-auto">
+                                        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators">
+                                                @foreach($space->photos as $key => $photo )
+                                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}" aria-current="true" aria-label="Slide 1"></button>
+                                                @endforeach
+
+                                            </div>
+                                            <div class="carousel-inner">
+                                                @foreach ($space->photos as $key => $photo )
+                                                <div class="carousel-item  {{ $key == 0 ? 'active' : '' }}">
+                                                    <img src="{{ Storage::url($photo->path) }}" alt="img-blur-shadow" class="img-fluid shadow w-100 border-radius-xl">
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
 
                                 <div class="card-body px-1 pb-0">
                                     <h6>{{ $space->title }}</h6>

@@ -67,8 +67,9 @@
 
                                         <div class="form-group">
                                             <label class="form-control-label">{{ __('Photo Depan') }}</label>
+                                            <div class="image-priview img-fluid"></div>
                                             <div class="input-group mb-4">
-                                                <input class="form-control @error('photoutama') is-invalid @enderror" value="{{ old('photoutama') }}" name="photoutama" type="file">
+                                                <input class="form-control @error('photoutama') is-invalid @enderror" value="{{ old('photoutama') }}" name="photoutama" id="image" onchange="previewImage()" type="file">
                                             </div>
                                             @error('photoutama') <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -109,6 +110,20 @@
 @push('scripts')
 <script>
     window.action = "submit"
+
+    function previewImage() {
+        const image = document.querySelector('#image');
+        const imgPriview = document.querySelector('.image-priview');
+
+        imgPriview.style.display = 'block'
+
+        const ofReader = new FileReader();
+        ofReader.readAsDataURL('image.files[0]');
+
+        ofReader.onload = function(oFREvent) {
+            imgPriview.src = oFREvent.target.result;
+        }
+    }
 
     $(document).ready(function() {
         $(".btn-add").click(function() {

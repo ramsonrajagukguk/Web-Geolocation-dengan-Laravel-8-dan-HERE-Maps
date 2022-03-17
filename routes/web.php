@@ -26,14 +26,10 @@ Route::post('/buku/pinjam/{id}', [BerandaController::class,'pinjam'])->name('buk
 
 Route::middleware('verified')-> group(function () {
     Route::get('/admin', [Beranda::class,'index'])->name('beranda');
-
- 
     Route::resource('/admin/space',SpaceController::class);
     Route::get('/admin/browse/spaces', [SpaceController::class,'browse'])->name('browse');
     
 });
-
-
 
 Auth::routes(['verify' => true]);
 

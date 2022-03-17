@@ -27,7 +27,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Alamat') }}</label>
-                                        <textarea name="addres" cols="30" rows="2" class="form-control @error('addres') is-invalid @enderror" placeholder="Alamat">{{ $space->addres }}</textarea>
+                                        <textarea name="addres" cols="30" rows="2" class="form-control @error('addres') is-invalid @enderror" placeholder="Alamat">{{ $space->address }}</textarea>
                                         @error('addres') <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -62,14 +62,30 @@
                                             @enderror
                                         </div>
 
+                                        @if($space->photoutama)
+                                        <img src="{{ Storage::url($space->photoutama) }}" alt="gambar utamat" class="mg-preview img-fluid mb-3 col-sm-5">
+                                        @else
+                                        <div class="img-preview img-fluid mb-3 col-sm-5"></div>
+                                        @endif
+
+                                        <div class="form-group">
+                                            <label class="form-control-label">{{ __('Photo Depan') }}</label>
+                                            <div class="input-group mb-4">
+                                                <input class="form-control @error('photoutama') is-invalid @enderror" value="{{ old('photoutama') }}" name="photoutama" id="image" onchange="previewImage()" type="file">
+                                            </div>
+                                            @error('photoutama') <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+
                                         <div class="form-group increment">
                                             <label class="form-control-label">{{ __('Photo') }}</label>
+                                            <input type="hidden" name="oldimage" value="{{ $space->photoutama }}">
+
                                             <div class="input-group mb-4">
-                                                <input class="form-control @error('photo') is-invalid @enderror" name="photo[]" type="file">
+                                                <input class="form-control" name="photo[]" type="file">
                                                 <button type="button" class="input-group-text btn-primary btn-add"><i class="fas fa-plus-square"></i></button>
                                             </div>
-                                            @error('photo') <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                         <div class="clone invisible">
                                             <div class="form-group">

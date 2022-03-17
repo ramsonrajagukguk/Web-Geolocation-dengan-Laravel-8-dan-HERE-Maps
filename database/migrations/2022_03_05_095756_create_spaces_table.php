@@ -21,7 +21,7 @@ class CreateSpacesTable extends Migration
             $table->text('description');
             $table->string('latitude');
             $table->string('longitude');
-            $table->string('foto');
+            $table->string('photoutama');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')
             ->onUpdate('CASCADE')
